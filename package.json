@@ -1,0 +1,33 @@
+{
+  "name": "taskmanagerapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunoandresilva/TaskManagerAPI.git"
+  },
+  "author": "Bruno Silva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunoandresilva/TaskManagerAPI/issues"
+  },
+  "homepage": "https://github.com/brunoandresilva/TaskManagerAPI#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "D": "^1.0.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10",
+    "pg": "^8.16.3"
+  }
+}
