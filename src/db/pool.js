@@ -29,10 +29,6 @@ async function assertDbConnection() {
     console.log("✅ Ligação a PostgreSQL OK");
   } catch (err) {
     console.error("❌ Falha na ligação a PostgreSQL:", err.message);
-    // dicas comuns:
-    // - "password authentication failed": user/password errados
-    // - "no pg_hba.conf entry": host/porta errados (ou connecting via IPv6/IPv4 diferente)
-    // - "server does not support SSL": remove PGSSLMODE=require em local
     process.exit(1);
   }
 }
