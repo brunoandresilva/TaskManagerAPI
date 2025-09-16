@@ -68,4 +68,11 @@ async function getUserProfile(username) {
   return userRes.rows[0];
 }
 
-module.exports = { registerUser, loginUser, getUserProfile };
+async function getUsers() {
+  const usersRes = await pool.query(
+    "SELECT id, username, created_at FROM users"
+  );
+  return usersRes.rows;
+}
+
+module.exports = { registerUser, loginUser, getUserProfile, getUsers };

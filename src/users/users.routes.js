@@ -33,4 +33,6 @@ router.post(
 
 router.get("/profile", [authMiddleware], usersController.getProfile);
 
+router.get("/users", [authMiddleware], usersController.getUsers);
+
 module.exports = router;

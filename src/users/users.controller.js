@@ -44,4 +44,17 @@ async function getProfile(req, res, next) {
   }
 }
 
-module.exports = { register, login, getProfile };
+async function getUsers(req, res, next) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const users = await usersService.getUsers();
+    return res.status(200).json({ users });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+module.exports = { register, login, getProfile, getUsers };
