@@ -1,6 +1,5 @@
 const express = require("express");
-require("dotenv").config();
-
+const config = require("./config"); // 👈 importa variáveis centralizadas
 const usersRouter = require("./users/users.routes");
 const { errorMiddleware } = require("./middlewares/error");
 
@@ -16,7 +15,6 @@ app.use("/api/users", usersRouter);
 // error handler final
 app.use(errorMiddleware);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`API a correr em http://localhost:${port}`);
+app.listen(config.port, () => {
+  console.log(`API a correr em http://localhost:${config.port}`);
 });

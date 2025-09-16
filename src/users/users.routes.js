@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const usersController = require("./users.controller");
+const { authMiddleware } = require("../middlewares/auth");
 
 const router = express.Router();
 
@@ -20,5 +21,16 @@ router.post(
   ],
   usersController.register
 );
+
+router.post(
+  "/login",
+  [
+    body("username").isString().withMessage("Username should be a string"),
+    body("password").isString().withMessage("Password should be a string"),
+  ],
+  usersController.login
+);
+
+router.get("/profile", [authMiddleware], usersController.getProfile);
 
 module.exports = router;
