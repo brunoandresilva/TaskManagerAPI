@@ -53,4 +53,6 @@ router.patch(
   usersController.updateMe
 );
 
+router.delete("/delete/:id", [authMiddleware], usersController.deleteUser);
+
 module.exports = router;

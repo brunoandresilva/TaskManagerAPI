@@ -57,6 +57,7 @@ async function getUsers(req, res, next) {
   }
 }
 
+// update username and/or password of the logged-in user (later will implement admin updating any user)
 async function updateMe(req, res, next) {
   try {
     const errors = validationResult(req);
@@ -71,4 +72,25 @@ async function updateMe(req, res, next) {
   }
 }
 
-module.exports = { register, login, getProfile, getUsers, updateMe };
+async function deleteUser(req, res, next) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const userId = req.params.id;
+    const user = await usersService.deleteUser(userId);
+    return res.status(200).json({ user });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+module.exports = {
+  register,
+  login,
+  getProfile,
+  getUsers,
+  updateMe,
+  deleteUser,
+};

@@ -123,10 +123,24 @@ async function updateUser(id, patch) {
   }
 }
 
+async function deleteUser(id) {
+  const deleteRes = await pool.query(
+    `DELETE FROM users WHERE id = $1 RETURNING id, username, created_at, updated_at`,
+    [id]
+  );
+  if (deleteRes.rowCount === 0) {
+    const err = new Error("User not found.");
+    err.status = 404;
+    throw err;
+  }
+  return deleteRes.rows[0];
+}
+
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
   getUsers,
   updateUser,
+  deleteUser,
 };
