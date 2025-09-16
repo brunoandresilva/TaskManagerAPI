@@ -35,4 +35,22 @@ router.get("/profile", [authMiddleware], usersController.getProfile);
 
 router.get("/users", [authMiddleware], usersController.getUsers);
 
+router.patch(
+  "/me",
+  [
+    authMiddleware,
+    body("username")
+      .optional()
+      .isString()
+      .withMessage("Username should be a string."),
+    body("password")
+      .optional()
+      .isString()
+      .withMessage("Password should be a string.")
+      .isLength({ min: 8 })
+      .withMessage("Password should be at least 8 characters long."),
+  ],
+  usersController.updateMe
+);
+
 module.exports = router;

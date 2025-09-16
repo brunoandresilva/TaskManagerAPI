@@ -57,4 +57,18 @@ async function getUsers(req, res, next) {
   }
 }
 
-module.exports = { register, login, getProfile, getUsers };
+async function updateMe(req, res, next) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const patch = req.body;
+    const user = await usersService.updateUser(req.user.id, patch);
+    return res.status(200).json({ user });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+module.exports = { register, login, getProfile, getUsers, updateMe };

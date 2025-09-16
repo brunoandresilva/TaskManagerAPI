@@ -29,7 +29,7 @@ async function registerUser({ username, password }) {
 
 async function loginUser({ username, password }) {
   const userRes = await pool.query(
-    "SELECT username, password FROM users WHERE username = $1",
+    "SELECT id, username, password FROM users WHERE username = $1",
     [username]
   );
 
@@ -48,9 +48,13 @@ async function loginUser({ username, password }) {
   }
 
   // generate jwt token
-  user.token = jwt.sign({ username: user.username }, config.jwt.secret, {
-    expiresIn: "1h",
-  });
+  user.token = jwt.sign(
+    { username: user.username, id: user.id },
+    config.jwt.secret,
+    {
+      expiresIn: "1h",
+    }
+  );
   return { username: user.username, token: user.token };
 }
 
@@ -75,4 +79,54 @@ async function getUsers() {
   return usersRes.rows;
 }
 
-module.exports = { registerUser, loginUser, getUserProfile, getUsers };
+async function updateUser(id, patch) {
+  const fields = [];
+  const values = [];
+  let idx = 1;
+
+  if (patch.username) {
+    fields.push(`username = $${idx++}`);
+    values.push(patch.username);
+  }
+  if (patch.password) {
+    const hashed = await hash.hashPassword(patch.password);
+    fields.push(`password = $${idx++}`);
+    values.push(hashed);
+  }
+
+  if (fields.length === 0) {
+    const err = new Error("No fields to update");
+    err.status = 400;
+    throw err;
+  }
+
+  const query = `UPDATE users SET ${fields.join(
+    ", "
+  )} WHERE id = $${idx} RETURNING id, username, created_at`;
+  values.push(id);
+
+  try {
+    const updateRes = await pool.query(query, values);
+    if (updateRes.rowCount === 0) {
+      const err = new Error("User not found.");
+      err.status = 404;
+      throw err;
+    }
+    return updateRes.rows[0];
+  } catch (error) {
+    if (error.code === "23505") {
+      // postgres unique_violation
+      const err = new Error("Username already exists.");
+      err.status = 409;
+      throw err;
+    }
+  }
+}
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  getUsers,
+  updateUser,
+};
