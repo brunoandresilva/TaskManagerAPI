@@ -34,7 +34,7 @@ Make sure you have the following installed on your system:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/TaskManagerAPI.git
+   git clone https://github.com/brunoandresilva/TaskManagerAPI.git
    cd TaskManagerAPI
    npm install
    cp .env.example .env //create the .env file based on the .env.example

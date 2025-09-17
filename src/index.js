@@ -6,6 +6,14 @@ const { errorMiddleware } = require("./middlewares/error");
 const app = express();
 app.use(express.json());
 
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: false, // true se usar cookies
+  })
+);
+
 // healthcheck
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
