@@ -3,10 +3,6 @@ const tasksService = require("./tasks.service");
 
 async function createTask(req, res, next) {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
     const task = req.body;
     task.user_id = req.user.id; // assuming authMiddleware sets req.user
     const newTask = await tasksService.createTask(task);
@@ -17,6 +13,17 @@ async function createTask(req, res, next) {
   }
 }
 
+async function getTasks(req, res, next) {
+  try {
+    const tasks = await tasksService.getTasks(req.user.id);
+    console.log(tasks);
+    return res.status(200).json(tasks);
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createTask,
+  getTasks,
 };

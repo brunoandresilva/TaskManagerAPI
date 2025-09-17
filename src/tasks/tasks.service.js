@@ -62,6 +62,16 @@ async function createTask(task) {
   }
 }
 
+async function getTasks(user_id) {
+  const query = `SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC`;
+  const result = await pool.query(query, [user_id]);
+  if (result.rowCount === 0) {
+    return [];
+  }
+  return result.rows;
+}
+
 module.exports = {
   createTask,
+  getTasks,
 };

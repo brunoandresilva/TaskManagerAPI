@@ -1,6 +1,7 @@
 const express = require("express");
 const { body } = require("express-validator");
 const { authMiddleware } = require("../middlewares/auth");
+const { validate } = require("../middlewares/validate");
 const tasksController = require("./tasks.controller");
 
 const router = express.Router();
@@ -35,8 +36,11 @@ router.post(
       .optional()
       .isISO8601()
       .withMessage("Completed date should be a valid date."),
+    validate,
   ],
   tasksController.createTask
 );
+
+router.get("/list", [authMiddleware, validate], tasksController.getTasks);
 
 module.exports = router;
