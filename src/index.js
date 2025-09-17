@@ -1,6 +1,7 @@
 const express = require("express");
-const config = require("./config"); // 👈 importa variáveis centralizadas
+const config = require("./config");
 const usersRouter = require("./users/users.routes");
+const tasksRouter = require("./tasks/tasks.routes");
 const { errorMiddleware } = require("./middlewares/error");
 
 const app = express();
@@ -19,6 +20,7 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 // routes
 app.use("/api/users", usersRouter);
+app.use("/api/tasks", tasksRouter);
 
 // error handler final
 app.use(errorMiddleware);
