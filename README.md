@@ -1,6 +1,7 @@
 # TaskManagerAPI
 
 TaskManagerAPI is a RESTful API developed to be the backend of what **will be** a simple Task Manager web application
+this is not updated beacuse I'm still developing it.
 
 ---
 
