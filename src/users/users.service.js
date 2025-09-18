@@ -55,7 +55,7 @@ async function loginUser({ username, password }) {
       expiresIn: "1h",
     }
   );
-  return { username: user.username, token: user.token };
+  return { username: user.username, token: user.token, id: user.id };
 }
 
 // profile endpoint - a protected endpoint that returns user info
