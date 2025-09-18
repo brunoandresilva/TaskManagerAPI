@@ -1,5 +1,10 @@
 const { Pool } = require("pg");
-require("dotenv").config();
+
+if (process.env.NODE_ENV === "test") {
+  require("dotenv").config({ path: "src/.env.test" });
+} else {
+  require("dotenv").config(); // .env normal
+}
 
 const ssl =
   process.env.PGSSLMODE === "require" || process.env.DATABASE_SSL === "true"
@@ -26,12 +31,17 @@ const pool = useConnStr
 async function assertDbConnection() {
   try {
     await pool.query("SELECT 1");
-    console.log("✅ Ligação a PostgreSQL OK");
+    if (process.env.NODE_ENV !== "test") {
+      console.log("✅ Ligação a PostgreSQL OK");
+    }
   } catch (err) {
     console.error("❌ Falha na ligação a PostgreSQL:", err.message);
     process.exit(1);
   }
 }
-assertDbConnection();
+// Só corre o check fora de test
+if (process.env.NODE_ENV !== "test") {
+  assertDbConnection();
+}
 
 module.exports = { pool };

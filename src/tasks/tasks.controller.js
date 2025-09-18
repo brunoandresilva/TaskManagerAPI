@@ -23,7 +23,43 @@ async function getTasks(req, res, next) {
   }
 }
 
+async function getTaskById(req, res, next) {
+  try {
+    const task = await tasksService.getTaskById(req.params.id);
+    console.log(task);
+    return res.status(200).json(task);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function partialEdit(req, res, next) {
+  try {
+    const updatedTask = await tasksService.partialEdit(
+      req.user.id,
+      req.params.id,
+      req.body
+    );
+    console.log(updatedTask);
+    return res.status(200).json(updatedTask);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+async function deleteTask(req, res, next) {
+  try {
+    await tasksService.deleteTask(req.user.id, req.params.id);
+    return res.status(204).send();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createTask,
   getTasks,
+  getTaskById,
+  partialEdit,
+  deleteTask,
 };

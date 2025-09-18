@@ -7,7 +7,7 @@ const tasksController = require("./tasks.controller");
 const router = express.Router();
 
 router.post(
-  "/create",
+  "/",
   [
     authMiddleware,
     body("title")
@@ -41,6 +41,46 @@ router.post(
   tasksController.createTask
 );
 
-router.get("/list", [authMiddleware, validate], tasksController.getTasks);
+router.get("/", [authMiddleware, validate], tasksController.getTasks);
+
+router.get("/:id", [authMiddleware, validate], tasksController.getTaskById);
+
+router.patch(
+  "/:id",
+  [
+    authMiddleware,
+    body("title")
+      .optional()
+      .trim()
+      .notEmpty()
+      .withMessage("Title should be a non-empty string.")
+      .isString()
+      .withMessage("Title should be a string."),
+    body("description")
+      .optional()
+      .isString()
+      .withMessage("Description should be a string."),
+    body("status")
+      .optional()
+      .isIn(["todo", "in_progress", "done"])
+      .withMessage("Status should be one of: todo, in_progress, done."),
+    body("priority")
+      .optional()
+      .isIn([0, 1, 2, 3])
+      .withMessage("Priority should be one of: 0, 1, 2, 3."),
+    body("due_at")
+      .optional()
+      .isISO8601()
+      .withMessage("Due date should be a valid date."),
+    body("completed_at")
+      .optional()
+      .isISO8601()
+      .withMessage("Completed date should be a valid date."),
+    validate,
+  ],
+  tasksController.partialEdit
+);
+
+router.delete("/:id", [authMiddleware, validate], tasksController.deleteTask);
 
 module.exports = router;
