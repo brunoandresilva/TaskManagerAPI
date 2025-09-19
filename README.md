@@ -17,6 +17,8 @@ This project is built with the following technologies:
 - [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) – JSON Web Tokens for authentication
 - [express-validator](https://express-validator.github.io/) – Request validation middleware
 - [nodemon](https://nodemon.io/) – Development tool for automatic restarts
+- [Jest](https://jestjs.io/) – JavaScript testing framework
+- [Supertest](https://github.com/visionmedia/supertest) – SuperAgent driven library for testing HTTP servers
 
 ---
 
