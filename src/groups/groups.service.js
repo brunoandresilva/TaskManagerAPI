@@ -46,7 +46,38 @@ async function deleteGroup(group_id, user_id) {
   }
 }
 
+async function editGroupName(group_id, user_id, newName) {
+  if (
+    group_id === null ||
+    user_id === null ||
+    newName.trim() === "" ||
+    newName === null
+  ) {
+    const error = new Error(
+      "Group id and user id must be non null values and the name must be a non empty string."
+    );
+    error.status(400);
+    throw error;
+  }
+
+  try {
+    const query = `UPDATE groups SET name = $1 WHERE id = $2 and user_id = $3 RETURNING *;`;
+    const result = await pool.query(query, [newName, group_id, user_id]);
+    if (result.rowCount === 0) {
+      const error = new Error(
+        "Group matching that group_id and user_id not found."
+      );
+      error.status = 404;
+      throw error;
+    }
+    return result.rows[0];
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   createGroup,
   deleteGroup,
+  editGroupName,
 };

@@ -35,4 +35,24 @@ router.delete(
   groupsController.deleteGroup
 );
 
+router.patch(
+  "/:id",
+  [
+    authMiddleware,
+    param("id")
+      .notEmpty()
+      .withMessage("Id is required.")
+      .isInt({ min: 1 })
+      .withMessage("id must be a positive integer"),
+    body("newName")
+      .trim()
+      .notEmpty()
+      .withMessage("Title is required.")
+      .isString()
+      .withMessage("Title is required and should be a non-empty string."),
+    validate,
+  ],
+  groupsController.editGroupName
+);
+
 module.exports = router;
