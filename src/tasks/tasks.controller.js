@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const tasksService = require("./tasks.service");
 
 async function createTask(req, res, next) {
