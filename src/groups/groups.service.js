@@ -23,6 +23,30 @@ async function createGroup(user_id, name) {
   }
 }
 
+async function deleteGroup(group_id, user_id) {
+  if (group_id === null || user_id === null) {
+    const error = new Error("Group id and user_id need to be non null values.");
+    error.status(400);
+    throw error;
+  }
+
+  try {
+    const query = `DELETE FROM groups WHERE id = $1 and user_id = $2 RETURNING id;`;
+    const result = await pool.query(query, [group_id, user_id]);
+    if (result.rowCount === 0) {
+      const error = new Error(
+        "Group matching that group_id and user_id not found."
+      );
+      error.status = 404;
+      throw error;
+    }
+    return;
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   createGroup,
+  deleteGroup,
 };

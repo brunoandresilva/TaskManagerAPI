@@ -9,6 +9,17 @@ async function createGroup(req, res, next) {
   }
 }
 
+async function deleteGroup(req, res, next) {
+  try {
+    await groupsService.deleteGroup(req.params.id, req.user.id);
+    console.log("Final");
+    return res.status(204).send();
+  } catch (error) {
+    return next(error);
+  }
+}
+
 module.exports = {
   createGroup,
+  deleteGroup,
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const { authMiddleware } = require("../middlewares/auth");
 const { validate } = require("../middlewares/validate");
 const groupsController = require("./groups.controller");
@@ -19,6 +19,20 @@ router.post(
     validate,
   ],
   groupsController.createGroup
+);
+
+router.delete(
+  "/:id",
+  [
+    authMiddleware,
+    param("id")
+      .notEmpty()
+      .withMessage("Id is required.")
+      .isInt({ min: 1 })
+      .withMessage("id must be a positive integer"),
+    validate,
+  ],
+  groupsController.deleteGroup
 );
 
 module.exports = router;
